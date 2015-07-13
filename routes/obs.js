@@ -33,7 +33,7 @@ router.route('/')
                     html: function(){
          //html = new EJS({url: '/obs/index.ejs'}).render(obs);
          console.log ('html');
-                         res.render('obs/index', {
+                         res.render('obs/index.ejs', {
                                title: 'All my Objects',
                                obs: obs
                           });
