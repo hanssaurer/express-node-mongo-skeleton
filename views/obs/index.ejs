@@ -1,4 +1,3 @@
-<!-- EJS - Template - Verbindung zu Server Data fehlt! -->
 <html>
 <head>
   <meta charset="utf8" />
@@ -7,15 +6,18 @@
 
 <body>
   <script type="text/javascript" src="node_modules/ejs/ejs.js"></script>
- <h1>Title?<%= title %></h1>
-<ul>
+  
+  <h1>Title?<%= title %></h1>
+
+  <ul>
     <% for(var i=0; i<obs.length; i++) { %>
         <li>
             <a href='obs/<%= obs[i]._id %>'>
-                <%= obs[i] %>
+                <%= obs[i].name %>
             </a>
         </li>
     <% } %>
-</ul>
+  </ul>
+
 </body>
 </html>
