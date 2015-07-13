@@ -1,0 +1,32 @@
+extends ../layout
+
+block content
+
+    div(ng-controller="obsCtrl")
+    h1= title
+    p Welcome to #{title}
+    
+    <table class="table" ng-controller="obsCtrl">
+    <tr ng-repeat="obj in obs">
+    <td>{{obj._id}}</td>
+    <td>{{obj.name}}</td>
+    <td>{{obj.badge}}</td>
+    </tr>
+    </table>
+ 
+    div(ng-controller="obsCtrl")
+        ul
+            li(ng-repeat="obj in obs")       
+                {{obj._id}} - {{ obj.name }} - {{obj.badge}}
+                p 
+                    a(href='/obs/{{obj._id}}/edit') Edit
+                p
+                    a(href='/obs/{{obj._id}}') Show
+                form(action='/obs/{{obj._id}}/edit',method='post',enctype='application/x-www-form-urlencoded')
+                    input(type='hidden',value='DELETE',name='_method')
+                    button(type='submit').
+                        Delete
+                    
+    p   This is the end!
+
+ 
