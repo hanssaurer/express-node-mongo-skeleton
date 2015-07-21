@@ -2,6 +2,13 @@ extends ../layout
 
 block content
 
+    script(src="/javascripts/controller.js")
+
+    p    What's loose here?
+
+    script.
+        var obs = !{JSON.stringify(obs)}
+
     div(ng-controller="obsCtrl")
     h1= title
     p Welcome to #{title}
@@ -29,4 +36,3 @@ block content
                     
     p   This is the end!
 
- 

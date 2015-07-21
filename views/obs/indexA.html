@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html ng-app="ThingsApp">
 <head>
-  <title>${title}</title>
+  <title><%= title %></title>
   <link rel="stylesheet" href="/stylesheets/style.css">
-
-
-
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
 
-
-
-  <script src="/javascripts/htmlcontrol.js"></script>
 </head>
 <body>
-  <div ng-controller="obsCtrl"></div>
-  <h1>${title}</h1>
-  <p>Welcome to All my Objects</p>
+<h1><%= title %></h1>
+
+  <ul>
+    <% for(var i=0; i<obs.length; i++) { %>
+        <li>
+            <a href='obs/<%= obs[i]._id %>'>
+                <%= obs[i].name %> 
+            </a>
+            <%= obs[i].dob %>
+        </li>
+    <% } %>
+  </ul>
+
+  <h1><%= title %> The Angular Way</h1>
   <table class="table" ng-controller="obsCtrl">
     <tr ng-repeat="obj in obs">
       <td>{{obj._id}}</td>
       <td>{{obj.name}}</td>
       <td>{{obj.badge}}</td>
+      <td><button ng-click="deleteObs(obj._id)">Delete        </button>
     </tr>
-</table>
-<div ng-controller="obsCtrl" ng-init="MyObs=obs">
+  </table>
+
+<div ng-controller="obsCtrl" >
   <ul>
     <li ng-repeat="obj in obs">      
       {{obj._id}} - {{ obj.name }} - {{obj.badge}}<p> 
@@ -38,10 +45,17 @@
   </div>
   <p>  This is the end!</p>
 
-<script>
-//console.log (title);
-  var obs =MyObs;
-</script>
 
 </body>
+
 </html>
+<script>
+// Placed inside this file to process ejs-tag
+angular.module('ThingsApp', [])
+    .constant('obs', <%- JSON.stringify(obs) %>)
+    .controller('obsCtrl', function($scope, obs){
+    $scope.obs = obs;
+    })
+
+</script>
+//<script src="/javascripts/controller.js"></script>
