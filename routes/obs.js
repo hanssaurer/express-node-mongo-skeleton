@@ -15,77 +15,80 @@ router.use(methodOverride(function(req, res){
       }
 }))
 
-
+var omo = mongoose.model('Obj');
+var objects = require("./objects.js")(omo);
 //build the REST operations at the base for Objects
 //this will be accessible from http://127.0.0.1:3000/obs if the default route for / is left unchanged
 router.route('/')
-    //GET all Objects
-    .get(function(req, res, next) {
-        console.log('GET - Request-original URL: ', req.originalUrl);
-        //retrieve all Objects from Monogo
-        mongoose.model('Obj').find({}, function (err, obs) {
-              if (err) {
-                  return console.error(err);
-              } else {
-                  //respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
-                  res.format({
-                      //HTML response will render the index.jade file in the views/obs folder. We are also setting "obs" to be an accessible variable in our jade view
-                    html: function(){
-         //html = new EJS({url: '/obs/index.ejs'}).render(obs);
-         console.log ('html');
-                         res.render('obs/index.ejs', {
-                               title: 'All my Objects',
-                               obs: obs
-                          });
-                    },
-                    //JSON response will show all obs in JSON format
-                    json: function(){
-         console.log ('json');
-                        res.json(obs);
-         console.log ('json 2');
-                    }
-                });
-              }     
-        });
-    })
+       
+       .get(objects.all)
+    // //GET all Objects
+    // .get(function(req, res, next) {
+    //     console.log('GET - Request-original URL: ', req.originalUrl);
+    //     //retrieve all Objects from Monogo
+    //     mongoose.model('Obj').find({}, function (err, obs) {
+    //           if (err) {
+    //               return console.error(err);
+    //           } else {
+    //               //respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
+    //               res.format({
+    //                   //HTML response will render the index.jade file in the views/obs folder. We are also setting "obs" to be an accessible variable in our jade view
+    //                 html: function(){
+    //      //html = new EJS({url: '/obs/index.ejs'}).render(obs);
+    //      console.log ('html');
+    //                      res.render('obs/index.ejs', {
+    //                            title: 'All my Objects',
+    //                            obs: obs
+    //                       });
+    //                 },
+    //                 //JSON response will show all obs in JSON format
+    //                 json: function(){
+    //      console.log ('json');
+    //                     res.json(obs);
+    //      console.log ('json 2');
+    //                 }
+    //             });
+    //           }     
+    //     });
+    // })
     //POST a new Object
-    .post(function(req, res) {
-        // Get values from POST request. These can be done through forms or REST calls. These rely on the "name" attributes for forms
-        var name = req.body.name;
-        var badge = req.body.badge;
-        var dob = req.body.dob;
-        var company = req.body.company;
-        var isloved = req.body.isloved;
-        console.log('POST - Request-original URL: ', req.originalUrl);
-        console.log('Body: ',req.body);
-        //call the create function for our database
-        mongoose.model('Obj').create({
-            name : name,
-            badge : badge,
-            dob : dob,
-            isloved : isloved
-        }, function (err, obj) {
-              if (err) {
-                  res.send("There was a problem adding the information to the database.");
-              } else {
-                  //Object has been created
-                  console.log('POST creating new Object: ' + obj);
-                  res.format({
-                      //HTML response will set the location and redirect back to the home page. You could also create a 'success' page if that's your thing
-                    html: function(){
-                        // If it worked, set the header so the address bar doesn't still say /adduser
-                        res.location("obs");
-                        // And forward to success page
-                        res.redirect("/obs");
-                    },
-                    //JSON response will show the newly created Object
-                    json: function(){
-                        res.json(obj);
-                    }
-                });
-              }
-        })
-    });
+    .post(objects.post) 
+        // // Get values from POST request. These can be done through forms or REST calls. These rely on the "name" attributes for forms
+        // var name = req.body.name;
+        // var badge = req.body.badge;
+        // var dob = req.body.dob;
+        // var company = req.body.company;
+        // var isloved = req.body.isloved;
+        // console.log('POST - Request-original URL: ', req.originalUrl);
+        // console.log('Body: ',req.body);
+        // //call the create function for our database
+        // mongoose.model('Obj').create({
+        //     name : name,
+        //     badge : badge,
+        //     dob : dob,
+        //     isloved : isloved
+        // }, function (err, obj) {
+        //       if (err) {
+        //           res.send("There was a problem adding the information to the database.");
+        //       } else {
+        //           //Object has been created
+        //           console.log('POST creating new Object: ' + obj);
+        //           res.format({
+        //               //HTML response will set the location and redirect back to the home page. You could also create a 'success' page if that's your thing
+        //             html: function(){
+        //                 // If it worked, set the header so the address bar doesn't still say /adduser
+        //                 res.location("obs");
+        //                 // And forward to success page
+        //                 res.redirect("/obs");
+        //             },
+        //             //JSON response will show the newly created Object
+        //             json: function(){
+        //                 res.json(obj);
+        //             }
+        //         });
+        //       }
+        // })
+    // });
 
     /* GET New Object page. */
     router.get('/new', function(req, res) {
@@ -120,6 +123,7 @@ router.param('id', function(req, res, next, id) {
             err.status = 417;
             res.format({
                 html: function(){
+console.log("Err created-html: " + err);
                     next(err);
                  },
                 json: function(){
@@ -139,29 +143,30 @@ router.param('id', function(req, res, next, id) {
 });
 
 router.route('/:id')
-  .get(function(req, res) {
-    console.log('route GET /:id - Request-original URL: ', req.originalUrl);
-    mongoose.model('Obj').findById(req.id, function (err, obj) {
-      if (err) {
-        console.log('GET Error: There was a problem retrieving: ' + err);
-      } else {
-        console.log('GET Retrieving ID: ' + obj._id);
-        var objdob = obj.dob.toISOString();
-        objdob = objdob.substring(0, objdob.indexOf('T'))
-        res.format({
-          html: function(){
-              res.render('obs/show', {
-                "objdob" : objdob,
-                "obj" : obj
-              });
-          },
-          json: function(){
-              res.json(obj);
-          }
-        });
-      }
-    });
-  });
+    .get(objects.oneobj)
+  // .get(function(req, res) {
+  //   console.log('route GET /:id - Request-original URL: ', req.originalUrl);
+  //   mongoose.model('Obj').findById(req.id, function (err, obj) {
+  //     if (err) {
+  //       console.log('GET Error: There was a problem retrieving: ' + err);
+  //     } else {
+  //       console.log('GET Retrieving ID: ' + obj._id);
+  //       var objdob = obj.dob.toISOString();
+  //       objdob = objdob.substring(0, objdob.indexOf('T'))
+  //       res.format({
+  //         html: function(){
+  //             res.render('obs/show', {
+  //               "objdob" : objdob,
+  //               "obj" : obj
+  //             });
+  //         },
+  //         json: function(){
+  //             res.json(obj);
+  //         }
+  //       });
+  //     }
+  //   });
+  // });
 
   //GET the individual obj by Mongo ID
 router.get('/:id/edit', function(req, res) {
@@ -234,7 +239,7 @@ router.put('/:id/edit', function(req, res) {
 });
 
 //DELETE a obj by ID
-router.delete('/:id/edit', function (req, res){
+router.delete('/:id', function (req, res){
     //find obj by ID
     mongoose.model('Obj').findById(req.id, function (err, obj) {
         if (err) {
