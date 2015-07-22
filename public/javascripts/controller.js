@@ -25,9 +25,17 @@ angular.module('ThingsApp', [])
       $scope.deleteObs = function(id) {
           $scope.loading = true;
 
-          obs.delete(id)
-            // if successful creation, call our get function to get all the new todos
+          obsFac.delete(id)
+              // if successful creation, call our get function to get all the new todos
               .success(function(data) {
+                  obsFac.get('/obs')
+                  .success(function(data) {
+                      $scope.obs = data;
+                  })
+                  .error(function(data) {
+                      console.log('Error: ' + data);
+                  });
+
               $scope.loading = false;
               $scope.obs = data; // assign our new list
           });

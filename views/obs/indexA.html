@@ -4,9 +4,30 @@
   <title><%= title %></title>
   <link rel="stylesheet" href="/stylesheets/style.css">
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+      <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+      <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.css" />
 
 </head>
 <body>
+
+        <header>
+            <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">Angular Routing Example</a>
+                </div>
+
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#"><i class="fa fa-home"></i> Home</a></li>
+                    <li><a href="#about"><i class="fa fa-shield"></i> About</a></li>
+                    <li><a href="#contact"><i class="fa fa-comment"></i> Contact</a></li>
+                </ul>
+            </div>
+            </nav>
+        </header>
+
+
+
 <h1><%= title %></h1>
 
   <ul>
@@ -43,6 +64,18 @@
       </li>
     </ul>
   </div>
+  
+<div>
+  <h1>Add New Object</h1>
+  <form id="formAddObj" name="addobj" method="post" action="/obs">
+    <p>Name: <input id="inputName" type="text" placeholder="ex. John Smith" name="name"></p>
+    <p>Badge:<input id="inputBadge" type="number" placeholder="ex. 123456" name="badge"></p>
+    <p>DOB: <input id="inputDob" type="date" name="dob"></p>
+    <p>Are You Loved?: <input id="inputIsLoved" type="checkbox" name="isloved"></p>
+    <p><button id="btnSubmit" type="submit">submit</button></p>
+  </form>
+</div>
+
   <p>  This is the end!</p>
 
 
