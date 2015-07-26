@@ -23,7 +23,15 @@ module.exports = function (omo) {
                             });
                         },
                         json: function(){
-                            res.json(obj);
+console.log("JSON Format");
+                            // res.render('obs/show.html', {
+                            //     "objdob" : objdob,
+                            //     "obj" : obj
+                            // });
+                            res.json({
+                                "objdob" : objdob,
+                                "obj" : obj
+                            });
                         }
                     });
                 }

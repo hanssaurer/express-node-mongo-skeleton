@@ -1,19 +1,6 @@
+var thingsControllers = angular.module('thingsControllers', []);
 
-angular.module('ThingsApp', [])
-    // Service
-    .factory('obsFac', ['$http', function($http){
-        return {
-            get: function() {
-              return $http.get('/obs');
-            },
-            delete : function(id) {
-              return $http.delete('/obs/' + id);
-            }
-        }    
-    }])
-
-    // Controller
-    .controller('obsCtrl', ['$scope', 'obsFac', function ($scope, obsFac) {
+thingsControllers.controller('obsCtrl', ['$scope', 'obsFac','$location','$route', function ($scope, obsFac, $location, $route) {
       obsFac.get().success(function(data){
         console.log(data, status);
         $scope.obs = data;
@@ -22,11 +9,11 @@ angular.module('ThingsApp', [])
         $scope.obs = [];
       });
     
-      $scope.deleteObs = function(id) {
+      $scope.deleteObj = function(id) {
           $scope.loading = true;
 
           obsFac.delete(id)
-              // if successful creation, call our get function to get all the new todos
+              // if successful show remaining objects
               .success(function(data) {
                   obsFac.get('/obs')
                   .success(function(data) {
@@ -39,5 +26,42 @@ angular.module('ThingsApp', [])
               $scope.loading = false;
               $scope.obs = data; // assign our new list
           });
+      },
+      $scope.showObj = function(id) {
+          obsFac.Id = id;
+          // obsFac.showData(id).success(function(data){
+          //     $scope.obj = data.obj;
+          // }
+          $location.path('/show');
+          $route.reload();
+          // //Load Show-Part plus Data
+          // obsFac.getShow()
+          // obsFac.show(id)
+          // .success(function(data) {
+          //     $scope.obj = data.obj;
+          //     $scope.objdob = data.objdob;
+          // });
       };
-  }])
+    }]);
+
+thingsControllers.controller('showCtrl', ['$scope', 'obsFac', function ($scope, obsFac) {
+    $scope.hans = "Hans";
+    if (obsFac.Id != undefined) {
+        obsFac.showData(obsFac.Id).success(function(data){
+            $scope.obj = data.obj;
+        })
+    };
+
+
+     // obsFac.get().success(function(data){
+     //    console.log(data, status);
+     //    $scope.obj = data.obj;
+     //  }).error(function(data, status){
+     //    console.log(data, status);
+     //    $scope.obj = [];
+     //  })
+
+      $scope.test = function() {
+         alert("Huh!!!!");
+      }
+ }])

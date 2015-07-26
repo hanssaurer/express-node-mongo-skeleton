@@ -1,0 +1,12 @@
+  <h1><%= title %></h1>
+
+  <ul>
+    <% for(var i=0; i<obs.length; i++) { %>
+        <li>
+            <a href='obs/<%= obs[i]._id %>'>
+                <%= obs[i].name %> 
+            </a>
+            <%= obs[i].dob %>
+        </li>
+    <% } %>
+  </ul>
