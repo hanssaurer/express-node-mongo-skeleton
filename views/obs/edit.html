@@ -1,0 +1,11 @@
+
+<h1>Object ID: {{obj._id}}</h1>
+<form action="/obs/edit" method="post" name="updatebobj" enctype="application/x-www-form-urlencoded">
+    <p>Name: <input id="inputName" type="text" value="{{obj.name}}" name="name"/></p>
+    <p>Badge: <input id="inputBadge" type="number" value="{{obj.badge}}" name="badge"/></p>
+    <p>DOB: <input id="inputDob" type="date" value="{{obj.dob}}" name="dob"/></p>
+    <p>Are you Loved?: <input id="inputIsLoved" type="checkbox" name="isloved" checked=('{{obj.isloved}}'==='true' ? "checked" : unchecked)/></p>
+    <p> <input type="hidden" value="PUT" name="_method"/></p>
+    <p> <input type="hidden" value="{{obj._id}}" name="id"/></p>
+    <p> <button id="btnSubmit" type="submit">Update</button></p>
+</form>

@@ -1,6 +1,6 @@
 'use strict';
 
-//var mongoose = require('mongoose'); //mongo connection
+var mongoose = require('mongoose'); //mongo connection
 
 module.exports = function (omo) {
     return {
@@ -13,23 +13,23 @@ module.exports = function (omo) {
                 if (err) {
                     console.log('GET Error: There was a problem retrieving: ' + err);
                 } else {
-                    var objdob = obj.dob.toISOString();
-                    objdob = objdob.substring(0, objdob.indexOf('T'))
+                    //var objdob = obj.dob.toISOString();
+                    //objdob = objdob.substring(0, objdob.indexOf('T'))
                     res.format({
                         html: function(){
                             res.render('obs/show', {
-                                "objdob" : objdob,
+                                //"objdob" : objdob,
                                 "obj" : obj
                             });
                         },
                         json: function(){
-console.log("JSON Format");
+                            console.log("JSON Format");
                             // res.render('obs/show.html', {
                             //     "objdob" : objdob,
                             //     "obj" : obj
                             // });
                             res.json({
-                                "objdob" : objdob,
+                           //     "objdob" : objdob,
                                 "obj" : obj
                             });
                         }
@@ -92,6 +92,40 @@ console.log("JSON Format");
                     });
                 }
             })
+        },
+        update: function(req, res) {
+            // Get our REST or form values. These rely on the "name" attributes
+            var id;
+            var updObj = {};
+
+            for (var key in req.body){
+                if (key != "id") {
+                   updObj[key] = req.body[key]
+               } else {
+                   id = req.body[key]
+                }
+            }    
+            omo.findById(id, function (err, obj) {
+                obj.update(updObj, function (err, objID) {
+                    if (err) {
+                        res.send("There was a problem updating the information to the database: " + err);
+                    } else {
+                        //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
+                        res.format({
+                            html: function(){
+console.log('html mit redirect???');
+                               res.redirect("/obs/" + obj._id);
+                            },
+                            //JSON responds showing the updated values
+                            json: function(){
+console.log('json!!!!!!!!!');
+                               res.json(obj);
+                            }
+                        });
+                    }
+                })
+            });
         }
-    }
+
+    }  
 }

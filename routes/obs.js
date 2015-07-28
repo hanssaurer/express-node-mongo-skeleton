@@ -17,6 +17,7 @@ router.use(methodOverride(function(req, res){
 
 var omo = mongoose.model('Obj');
 var objects = require("./objects.js")(omo);
+console.log('objects included!!!!!!!!!!!!!!!!!!');
 //build the REST operations at the base for Objects
 //this will be accessible from http://127.0.0.1:3000/obs if the default route for / is left unchanged
 router.route('/')
@@ -123,7 +124,7 @@ router.param('id', function(req, res, next, id) {
             err.status = 417;
             res.format({
                 html: function(){
-console.log("Err created-html: " + err);
+                    console.log("Err created-html: " + err);
                     next(err);
                  },
                 json: function(){
@@ -170,7 +171,7 @@ router.route('/:id')
 
   //GET the individual obj by Mongo ID
 router.get('/:id/edit', function(req, res) {
-    console.log('route GET /:id/edit - Request-original URL: ', req.originalUrl);
+    console.log('route GET /:id/edit - Request-original URL: ', req.originalUrl + 'Id: ' + req.id);
     //search for the obj within Mongo
     mongoose.model('Obj').findById(req.id, function (err, obj) {
         if (err) {
@@ -194,49 +195,55 @@ router.get('/:id/edit', function(req, res) {
                  },
                  //JSON response will return the JSON output
                 json: function(){
+            console.log("Edit JSON");
                        res.json(obj);
-                 }
+                }
             });
         }
     });
 });
 
-//PUT to update a obj by ID
-router.put('/:id/edit', function(req, res) {
-    // Get our REST or form values. These rely on the "name" attributes
-    var name = req.body.name;
-    var badge = req.body.badge;
-    var dob = req.body.dob;
-    var company = req.body.company;
-    var isloved = req.body.isloved;
+console.log("Hier");
 
-   //find the document by ID
-        mongoose.model('Obj').findById(req.id, function (err, obj) {
-            //update it
-            obj.update({
-                name : name,
-                badge : badge,
-                dob : dob,
-                isloved : isloved
-            }, function (err, objID) {
-              if (err) {
-                  res.send("There was a problem updating the information to the database: " + err);
-              } 
-              else {
-                      //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
-                      res.format({
-                          html: function(){
-                               res.redirect("/obs/" + obj._id);
-                         },
-                         //JSON responds showing the updated values
-                        json: function(){
-                               res.json(obj);
-                         }
-                      });
-               }
-            })
-        });
-});
+//PUT to update a obj by ID
+router.put('/edit', objects.update);
+
+// router.put('/edit', function(req, res) {
+//     // Get our REST or form values. These rely on the "name" attributes
+//     var name = req.body.name;
+//     var badge = req.body.badge;
+//     var dob = req.body.dob;
+//     var id = req.body.id;
+//     var isloved = req.body.isloved;
+
+//    //find the document by ID
+//         mongoose.model('Obj').findById(id, function (err, obj) {
+//             //update it 
+//  console.log("vor Update: " + obj);
+//             obj.update({ 
+//                 name : name,
+//                 badge : badge,
+//                 dob : dob,
+//                 isloved : isloved
+//             }, function (err, objID) {
+//               if (err) {
+//                   res.send("There was a problem updating the information to the database: " + err);
+//               } 
+//               else {
+//                       //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
+//                       res.format({
+//                           html: function(){
+//                                res.redirect("/obs/" + obj._id);
+//                          },
+//                          //JSON responds showing the updated values
+//                         json: function(){
+//                                res.json(obj);
+//                          }
+//                       });
+//                }
+//             })
+//         });
+// });
 
 //DELETE a obj by ID
 router.delete('/:id', function (req, res){
