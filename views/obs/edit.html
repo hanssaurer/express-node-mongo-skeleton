@@ -1,11 +1,49 @@
 
-<h1>Object ID: {{obj._id}}</h1>
-<form action="/obs/edit" method="post" name="updatebobj" enctype="application/x-www-form-urlencoded">
-    <p>Name: <input id="inputName" type="text" value="{{obj.name}}" name="name"/></p>
-    <p>Badge: <input id="inputBadge" type="number" value="{{obj.badge}}" name="badge"/></p>
-    <p>DOB: <input id="inputDob" type="date" value="{{obj.dob}}" name="dob"/></p>
-    <p>Are you Loved?: <input id="inputIsLoved" type="checkbox" name="isloved" checked=('{{obj.isloved}}'==='true' ? "checked" : unchecked)/></p>
-    <p> <input type="hidden" value="PUT" name="_method"/></p>
+<div class="col-sm-6">
+    <h3>Edit Object</h3>
+    <form role="form">
+
+
+    <p>Name: <input id="inputName" type="text" value="{{obj.name}}" name="name" ng-model="obj.name"/></p>
+    <p>Badge: <input id="inputBadge" type="number" value="{{obj.badge}}" name="badge" ng-model="obj.badge"/></p>
+
+    <p>Are you Loved?: <input id="inputIsLoved" type="checkbox" name="isloved" ng-checked="true" ng-model="obj.isloved"/></p>
+    
     <p> <input type="hidden" value="{{obj._id}}" name="id"/></p>
-    <p> <button id="btnSubmit" type="submit">Update</button></p>
-</form>
+    
+
+
+        <div class="form-group"> 
+            <label class="col-sm-2 control-label">Date</label>
+            <div class="col-sm-4">
+                <p class="input-group">
+                    <input type="text" class="form-control" datetime-picker="dd-MM-yyyy" ng-model="obj.dob" is-open="open.date1" enable-time="false" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-on-date-selection="false" datepicker-append-to-body="true" clear-text="Remove" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'date1')"><i class="fa fa-calendar"></i></button>
+                </span>
+                </p>
+            </div>
+        </div>
+            <label class="col-sm-2 control-label">Time</label>
+            <div class="col-sm-4">
+                <p class="input-group">
+                    <input type="text" class="form-control" datetime-picker="HH:mm" ng-model="time" is-open="open.date2" enable-date="false" timepicker-options="timeOptions" close-on-selection="true" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="openCalendar($event, 'date2')"><i class="fa fa-clock-o"></i></button>
+                </span>
+                </p>
+            </div>
+            <label class="col-sm-2 control-label">model</label>
+            <div class="col-sm-4">
+                <p class="form-control-static">{{ obj.dob }}</p>
+            </div>
+            <label class="col-sm-2 control-label">model</label>
+            <div class="col-sm-4">
+                <p class="form-control-static">{{ time }}</p>
+            </div>
+
+    <p> <button ng-click="save(obj)">Save       </button></p>
+
+
+    </form>
+</div>

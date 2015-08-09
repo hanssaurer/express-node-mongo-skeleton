@@ -1,8 +1,8 @@
   <h1>Add New Object</h1>
-  <form id="formAddObj" name="addobj" method="post" action="/obs">
-    <p>Name: <input id="inputName" type="text" placeholder="ex. John Smith" name="name"></p>
-    <p>Badge:<input id="inputBadge" type="number" placeholder="ex. 123456" name="badge"></p>
-    <p>DOB: <input id="inputDob" type="date" name="dob"></p>
-    <p>Are You Loved?: <input id="inputIsLoved" type="checkbox" name="isloved"></p>
-    <p><button id="btnSubmit" type="submit">submit</button></p>
+  <form>
+    <p>Name: <input id="inputName" type="text" placeholder="ex. John Smith" name="name" ng-model="obj.name"></p>
+    <p>Badge:<input id="inputBadge" type="number" placeholder="ex. 123456" name="badge" ng-model="obj.badge"></p>
+    <p>DOB: <input id="inputDob" type="date" name="dob" ng-model="obj.dob"></p>
+    <p>Are You Loved?: <input id="inputIsLoved" type="checkbox" name="isloved" ng-model="obj.isLoved"></p>
+    <p> <button ng-click="addObj(obj)">Save      </button></p>
   </form>

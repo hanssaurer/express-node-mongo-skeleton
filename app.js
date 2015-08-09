@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
-var obj = require('./model/obj');
+var obj = require('./model/objModel');
 var obs = require('./routes/obs');
 var users = require('./routes/users');
 
@@ -32,6 +32,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/obs', obs);
 app.use('/users', users);
+
+app.get(/dt/, function(req, res) {
+  res.sendFile(path.join(__dirname, req.path));
+});
 
 app.get(/html/, function(req, res) {
   res.render('obs/'+req.path);

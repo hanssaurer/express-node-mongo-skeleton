@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-route.js"></script>
+    <script src="javascripts/ui-bootstrap-custom-tpls-0.13.2.js"></script>
+    <script src="javascripts/datetime-picker.js"></script>
+
+<base href="/">
 </head>
 <body>
 
@@ -18,19 +22,19 @@
                 </div>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href=""><i class="fa fa-home"></i> Home</a></li>
-                    <li><a href="#new"><i class="fa fa-plus-square"></i> New</a></li>
-                    <li><a href="#/show"><i class="fa fa-comment"></i> Show</a></li>
-                    <li><a href="#/test"><i class="fa fa-comment"></i> Test</a></li>
+                    <li><a href="obs"><i class="fa fa-home"></i> Home</a></li>
+                    <li><a href="new"><i class="fa fa-plus-square"></i> New</a></li>
+                    <li><a href="/show"><i class="fa fa-comment"></i> Show</a></li>
+                    <li><a href="/test"><i class="fa fa-comment"></i> Test</a></li>
                 </ul>
             </div>
         </nav>
     </header>
-
+<div class="col-sm-5">
   <h1><%= title %> The Angular Way</h1>
   <table class="table" ng-controller="obsCtrl">
     <tr ng-repeat="obj in obs">
-      <td>{{obj._id}}</td>
+      <!--td>{{obj._id}}</td-->
       <td>{{obj.name}}</td>
       <td>{{obj.badge}}</td>
       <td><button ng-click="deleteObj(obj._id)">Delete        </button>
@@ -38,15 +42,14 @@
       <td><button ng-click="editObj(obj._id)">Edit        </button>
     </tr>
   </table>
-
+</div>  
     
-<div ng-controller="showCtrl" [onload="test()]">
-      <td><button ng-click="test()">Test       </button>
+  <div ng-controller="showCtrl" [onload="test()]">
+      <td><button ng-click="test()">Test</button>
+      <div ng-view >
+      </div>
+  </div>
 
-    <div ng-view >
-    </div>
-</div>
-  
   <p>  This is the end!</p>
 
 
@@ -55,55 +58,8 @@
 </html>
 <script>
 // Placed inside this file to process ejs-tag
-angular.module('ThingsApp', ['ngRoute','thingsControllers'])
-    .constant('obs', <%- JSON.stringify(obs) %>)
+ThingsModule = angular.module('ThingsApp', ['ngRoute','thingsControllers'])
+    .constant('obs', <%- JSON.stringify(obs) %>);
 
-    .config(['$routeProvider', function($routeProvider) {
-        $routeProvider
-        // route for the home page
-        .when('/', {
-            templateUrl : '',
-            controller  : 'obsCtrl'
-        })
-        .when('/obs/:id/edit', {
-            templateUrl : 'edit.html',
-            controller  : 'showCtrl'
-        })
-        .when('/obs/:id', {
-            templateUrl : 'show.html',
-            controller  : 'showCtrl'
-        })
-        .when('/test', {
-            templateUrl : 'test.html'
-        })
-        .when('/show', {
-            templateUrl : 'show.html'
-        })
-        // route for the about page
-        .when('/new', {
-            templateUrl : 'obs/new',
-            controller  : 'obsCtrl'
-        });
-
-    }])
-    .factory('obsFac', ['$http', function($http){
-        return {
-            get: function() {
-              return $http.get('/obs');
-            },
-            getShow: function() {
-              return $http.get('show.html');
-            },
-            showData: function(id) {
-              return $http.get('/obs/' + id);
-            },
-            editData: function(id) {
-              return $http.get('/obs/' + id + '/edit');
-            },
-            delete : function(id) {
-              return $http.delete('/obs/' + id);
-            }
-        }    
-    }])
 </script>
 <script src="/javascripts/controller.js"></script>
